@@ -55,6 +55,10 @@ if type go > /dev/null; then
   git clone https://github.com/dgryski/vim-godef ~/.vim/bundle/vim-godef
   echo Gocode
   go get -u github.com/nsf/gocode
+  # Vim Gocode installieren
+  cd $GOPATH/src/github.com/nsf/gocode/vim
+  ./symlink.sh
+  cd
 
   echo Vim YouCompleteMe
   cd $HOME/.vim/bundle
