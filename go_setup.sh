@@ -53,6 +53,8 @@ if type go > /dev/null; then
   go get -v code.google.com/p/rog-go/exp/cmd/godef
   go install -v code.google.com/p/rog-go/exp/cmd/godef
   git clone https://github.com/dgryski/vim-godef ~/.vim/bundle/vim-godef
+  mkdir ~/.vim/plugin
+  cp ~/.vim/bundle/vim-godef/plugin/godef.vim ~/.vim/plugin/
   echo Gocode
   go get -u github.com/nsf/gocode
   # Vim Gocode installieren
