@@ -71,6 +71,14 @@ fi
 
 echo "Zsh installieren..."
 sudo chsh -s /bin/zsh
+
+echo "NodeJS installieren"
+cd /tmp
+wget http://nodejs.org/dist/v0.10.26/node-v0.10.26-linux-x86.tar.gz
+sudo tar -xzf node-v.0.10.26-linux-x86.tar.gz
+cd node-v.0.10.26-linux-x86
+./configure && make && sudo make install && sudo npm install -g bower brunch
+
 echo FERTIG
 echo "Nicht vergessen:"
 echo " - Im Terminal einen Font für Powerline auswählen"
