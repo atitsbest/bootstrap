@@ -1,0 +1,6 @@
+fancy_echo FERTIG
+fancy_echo "Nicht vergessen:"
+fancy_echo " - Im Terminal einen Font für Powerline auswählen"
+fancy_echo " - Chrome als Standard-Browser setzten"
+fancy_echo " - Vim Bundles insteallieren (:BundleInstall)"
+fancy_echo " - Abmelden und neu anmelden (damit zsh verwendet wird)"

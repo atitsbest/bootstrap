@@ -1,0 +1,13 @@
+common-components/bash-shebang
+common-components/exit-trap
+common-components/shared-functions
+linux-components/distro-check
+linux-components/package-update
+linux-components/derivative-packages
+common-components/zsh
+linux-components/vim-setup
+linux-components/silver-searcher-from-source
+common-components/dotfiles
+linux-components/golang
+common-components/nodejs-packages
+linux-components/remember

@@ -1,0 +1,3 @@
+fancy_echo "Dotfiles installieren..."
+cd
+git clone http://github.com/atitsbest/dotfiles && cd dotfiles && ./setup.sh

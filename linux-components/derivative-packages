@@ -1,0 +1,41 @@
+fancy_echo "Installing git, for source control management ..."
+  sudo apt-get install -y git
+
+fancy_echo "Installing libraries for common gem dependencies ..."
+  sudo apt-get install -y build-essentials cmake python-dev libxslt1-dev libcurl4-openssl-dev libksba8 libksba-dev libqtwebkit-dev libreadline-dev
+
+fancy_echo "Installing sqlite3, for prototyping database-backed rails apps"
+ sudo apt-get install -y libsqlite3-dev sqlite3
+
+fancy_echo "Installing Postgres, a good open source relational database ..."
+  sudo apt-get install -y postgresql postgresql-server-dev-all
+
+fancy_echo "Installing Redis, a good key-value database ..."
+  sudo apt-get install -y redis-server
+
+fancy_echo "Installing ctags, to index files for vim tab completion of methods, classes, variables ..."
+  sudo apt-get install -y exuberant-ctags
+
+fancy_echo "Installing vim ..."
+  sudo apt-get install -y vim-gtk
+
+fancy_echo "Installing tmux, to save project state and switch between projects ..."
+  sudo apt-get install -y tmux
+
+fancy_echo "Installing watch, to execute a program periodically and show the output ..."
+  sudo apt-get install -y watch
+
+fancy_echo "Installing curl ..."
+  sudo apt-get install -y curl
+
+fancy_echo "Installing wget ..."
+  sudo apt-get install -y wget
+
+fancy_echo "Installing zsh ..."
+  sudo apt-get install -y zsh
+
+fancy_echo "Installing mercurial ..."
+  sudo apt-get install -y mercurial
+
+fancy_echo "Installing node.js ..."
+  sudo apt-get install -y nodejs

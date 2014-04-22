@@ -1,0 +1,5 @@
+fancy_ echo "Vim YouCompleteMe..."
+cd $HOME/.vim/bundle
+git clonse http://github.com/Valloric/YouCompleteMe
+cd ~/.vim/bundle/YouCompleteMe
+./install.sh --clang-completer

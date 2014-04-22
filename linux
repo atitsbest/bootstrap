@@ -1,0 +1,127 @@
+#!/usr/bin/env bash### end common-components/bash-shebang
+
+trap 'ret=$?; test $ret -ne 0 && printf "failed\n\n" >&2; exit $ret' EXIT
+
+set -e### end common-components/exit-trap
+
+fancy_echo() {
+  printf "\n%b\n" "$1"
+}### end common-components/shared-functions
+
+if ! grep -qiE 'wheezy|jessie|precise|saucy|trusty' /etc/os-release; then
+  fancy_echo "Sorry! we don't currently support that distro."
+  exit 1
+fi### end linux-components/distro-check
+
+fancy_echo "Updating system packages ..."
+sudo apt-get update### end linux-components/package-update
+
+fancy_echo "Installing git, for source control management ..."
+  sudo apt-get install -y git
+
+fancy_echo "Installing libraries for common gem dependencies ..."
+  sudo apt-get install -y build-essentials cmake python-dev libxslt1-dev libcurl4-openssl-dev libksba8 libksba-dev libqtwebkit-dev libreadline-dev
+
+fancy_echo "Installing sqlite3, for prototyping database-backed rails apps"
+ sudo apt-get install -y libsqlite3-dev sqlite3
+
+fancy_echo "Installing Postgres, a good open source relational database ..."
+  sudo apt-get install -y postgresql postgresql-server-dev-all
+
+fancy_echo "Installing Redis, a good key-value database ..."
+  sudo apt-get install -y redis-server
+
+fancy_echo "Installing ctags, to index files for vim tab completion of methods, classes, variables ..."
+  sudo apt-get install -y exuberant-ctags
+
+fancy_echo "Installing vim ..."
+  sudo apt-get install -y vim-gtk
+
+fancy_echo "Installing tmux, to save project state and switch between projects ..."
+  sudo apt-get install -y tmux
+
+fancy_echo "Installing watch, to execute a program periodically and show the output ..."
+  sudo apt-get install -y watch
+
+fancy_echo "Installing curl ..."
+  sudo apt-get install -y curl
+
+fancy_echo "Installing wget ..."
+  sudo apt-get install -y wget
+
+fancy_echo "Installing zsh ..."
+  sudo apt-get install -y zsh
+
+fancy_echo "Installing mercurial ..."
+  sudo apt-get install -y mercurial
+
+fancy_echo "Installing node.js ..."
+  sudo apt-get install -y nodejs### end linux-components/derivative-packages
+
+fancy_echo "Changing your shell to zsh ..."
+  chsh -s $(which zsh)### end common-components/zsh
+
+fancy_echo "Install Vundle..."
+git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
+
+fancy_echo "Install Vim Themes installieren..."
+cd /tmp
+git clone http://github.com/chriskempson/vim-tomorrow-theme
+mkdir ~/.vim/colors
+cp /tmp/vim-tomorrow-theme/colors/* ~/.vim/colors/
+cd ~/.vim/colors
+wget -N http://raw.github.com/oguzbilgic/sexy-railscasts-theme/master/colors/sexy-railscasts.vim
+
+fancy_echo "Install Airline..."
+mkdir $HOME/.fonts
+cd $HOME/.fonts
+wget -N https://raw.github.com/Lokaltog/powerline-fonts/master/Inconsolata/Inconsolata%20for%20Powerline.otf
+wget -N https://raw.github.com/Lokaltog/powerline-fonts/master/DroidSansMono/Droid%20Sans%20Mono%20for%20Powerline.otf
+wget -N https://raw.github.com/Lokaltog/powerline-fonts/master/DejaVuSansMono/DejaVu%20Sans%20Mono%20for%20Powerline.ttf
+wget -N https://raw.github.com/Lokaltog/powerline-fonts/master/DejaVuSansMono/DejaVu%20Sans%20Mono%20Oblique%20for%20Powerline.ttf
+wget -N https://raw.github.com/Lokaltog/powerline-fonts/master/DejaVuSansMono/DejaVu%20Sans%20Mono%20Bold%20for%20Powerline.ttf
+wget -N https://raw.github.com/Lokaltog/powerline-fonts/master/DejaVuSansMono/DejaVu%20Sans%20Mono%20Bold%20Oblique%20for%20Powerline.ttf
+sudo fc-cache -f### end linux-components/vim-setup
+
+if ! command -v ag &>/dev/null; then
+  fancy_echo "Installing The Silver Searcher (better than ack or grep) to search the contents of files ..."
+    git clone git://github.com/ggreer/the_silver_searcher.git /tmp/the_silver_searcher
+    sudo aptitude install -y automake pkg-config libpcre3-dev zlib1g-dev liblzma-dev
+    sh /tmp/the_silver_searcher/build.sh
+    cd /tmp/the_silver_searcher
+    sh build.sh
+    sudo make install
+    cd
+    rm -rf /tmp/the_silver_searcher
+fi### end linux-components/silver-searcher-from-source
+
+fancy_echo "Dotfiles installieren..."
+cd
+git clone http://github.com/atitsbest/dotfiles && cd dotfiles && ./setup.sh### end common-components/dotfiles
+
+fancy_echo "Go installieren..."
+cd /tmp
+wget -N https://go.googlecode.com/files/go1.2.1.linux-386.tar.gz
+sudo tar -C /usr/local -xzf go1.2.1.linux-386.tar.gz
+mkdir -p $HOME/dev/go/bin
+mkdir -p $HOME/dev/go/src
+sed '/export GO/d' $HOME/.zshrc.local
+echo 'export GOROOT=/usr/local/go' >> ~/.zshrc.local
+echo 'export GOPATH=$HOME/dev/go' >> ~/.zshrc.local
+echo 'export GOBIN=$GOPATH/bin' >> ~/.zshrc.local
+echo 'export PATH=$PATH:$GOROOT/bin:$GOBIN' >> ~/.zshrc.local
+
+# Damit wir schon jetzt die Go Packages installieren können.
+export GOROOT=/usr/local/go
+export GOPATH=$HOME/dev/go
+export GOBIN=$GOPATH/bin
+export PATH=$PATH:$GOROOT/bin:$GOBIN
+
+if type go > /dev/null; then
+	cd ~/.vim/bundle
+	git clone https://github.com/fatih/vim-go.git
+fi### end linux-components/golang
+
+fancy_echo "Installing Node.js Packages..."
+sudo npm install -g bower brunch### end common-components/nodejs-packages
+
