@@ -1,0 +1,28 @@
+fancy_echo "Installing Vim-Plugins..."
+if [ ! -d "~/.vim/bundle/vundle"  ]; then
+    git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
+fi
+
+fancy_echo "Install Vim Themes installieren..."
+cd /tmp
+rm -rf /tmp/vim-tomorrow-theme
+git clone http://github.com/chriskempson/vim-tomorrow-theme
+mkdir -p ~/.vim/colors
+cp /tmp/vim-tomorrow-theme/colors/* ~/.vim/colors/
+cd ~/.vim/colors
+wget -N http://raw.github.com/oguzbilgic/sexy-railscasts-theme/master/colors/sexy-railscasts.vim
+
+if [ ! -d ~/.vim/bundle/vim-go ]; then
+  git clone https://github.com/fatih/vim-go.git ~/.vim/bundle/vim-go
+fi
+
+mkdir -p $HOME/.fonts
+cd $HOME/.fonts
+rm -f *Powerline.*
+wget -N https://raw.github.com/Lokaltog/powerline-fonts/master/Inconsolata/Inconsolata%20for%20Powerline.otf
+wget -N https://raw.github.com/Lokaltog/powerline-fonts/master/DroidSansMono/Droid%20Sans%20Mono%20for%20Powerline.otf
+wget -N https://raw.github.com/Lokaltog/powerline-fonts/master/DejaVuSansMono/DejaVu%20Sans%20Mono%20for%20Powerline.ttf
+wget -N https://raw.github.com/Lokaltog/powerline-fonts/master/DejaVuSansMono/DejaVu%20Sans%20Mono%20Oblique%20for%20Powerline.ttf
+wget -N https://raw.github.com/Lokaltog/powerline-fonts/master/DejaVuSansMono/DejaVu%20Sans%20Mono%20Bold%20for%20Powerline.ttf
+wget -N https://raw.github.com/Lokaltog/powerline-fonts/master/DejaVuSansMono/DejaVu%20Sans%20Mono%20Bold%20Oblique%20for%20Powerline.ttf
+sudo fc-cache -f

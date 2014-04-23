@@ -26,17 +26,26 @@ for vagrantfile in tests/Vagrantfile.*; do
   vagrant_destroy
   vagrant up || failure 'Unable to start virtual machine'
 
-
 	vagrant ssh -c 'echo vagrant | bash /vagrant/linux' \
 		|| failure 'Installation script failed to run'
 
   vagrant ssh -c '[ "$SHELL" = "/usr/bin/zsh" ]' \
     || failure 'Installation did not set $SHELL to ZSH'
 
-  go_version="go version go1.2.1 linux/386"
-
-  vagrant ssh -c 'zsh -i -l -c "go version" | grep -Fq "$go_version"' \
+  go_version="go version go1.2.1 linux/amd64"
+  vagrant ssh -c "command -v /usr/local/go/bin/go" \
     || failure 'Installation did not install the correct go'
+
+  node_version="v0.10.26"
+  vagrant ssh -c "node -v" | grep -Fq "$node_version" \
+    || failure 'Installation did not install the correct node.js'
+
+  vagrant ssh -c 'command -v brunch' \
+    || failure 'Installation did not install brunch'
+  vagrant ssh -c 'command -v bower' \
+    || failure 'Installation did not install bower'
+  vagrant ssh -c 'command -v less' \
+    || failure 'Installation did not install less'
 
 	# TODO: Weitere Tests
 

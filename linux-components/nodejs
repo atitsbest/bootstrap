@@ -1,0 +1,8 @@
+if ! command -v node &>/dev/null; then
+  fancy_echo "Installing Node.js"
+  cd /tmp
+  git clone https://github.com/joyent/node.git
+  cd node
+  git checkout v0.10.26 #Try checking nodejs.org for what the stable version is
+  ./configure && make && sudo make install
+fi

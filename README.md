@@ -1,8 +1,9 @@
 # Bootstrap
 
-## Scripts
+Schwer inspiriert von thoughbots laptop script.
 
-### go_setup
-Entwicklungsumgebung für Go auf Basis von \*NIX.
-Gestestet auf Xubuntu 13.10
+## TODOs
+
+ * Pro Kompomente einen optionalen Tests anstatt die Tests fix fertig in
+   runner.sh zu führen.
 

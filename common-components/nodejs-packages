@@ -1,2 +1,2 @@
 fancy_echo "Installing Node.js Packages..."
-sudo npm install -g bower brunch
+sudo npm install -g bower brunch less

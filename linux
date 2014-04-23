@@ -1,26 +1,36 @@
-#!/usr/bin/env bash### end common-components/bash-shebang
+#!/usr/bin/env bash
+
+### end common-components/bash-shebang
 
 trap 'ret=$?; test $ret -ne 0 && printf "failed\n\n" >&2; exit $ret' EXIT
 
-set -e### end common-components/exit-trap
+set -e
+
+### end common-components/exit-trap
 
 fancy_echo() {
   printf "\n%b\n" "$1"
-}### end common-components/shared-functions
+}
 
-if ! grep -qiE 'wheezy|jessie|precise|saucy|trusty' /etc/os-release; then
+### end common-components/shared-functions
+
+if ! uname -a | grep -E 'wheezy|jessie|precise|saucy|trusty'; then
   fancy_echo "Sorry! we don't currently support that distro."
   exit 1
-fi### end linux-components/distro-check
+fi
+
+### end linux-components/distro-check
 
 fancy_echo "Updating system packages ..."
-sudo apt-get update### end linux-components/package-update
+sudo apt-get update
+
+### end linux-components/package-update
 
 fancy_echo "Installing git, for source control management ..."
   sudo apt-get install -y git
 
 fancy_echo "Installing libraries for common gem dependencies ..."
-  sudo apt-get install -y build-essentials cmake python-dev libxslt1-dev libcurl4-openssl-dev libksba8 libksba-dev libqtwebkit-dev libreadline-dev
+  sudo apt-get install -y build-essential cmake python-dev libxslt1-dev libcurl4-openssl-dev libksba8 libksba-dev libqtwebkit-dev libreadline-dev
 
 fancy_echo "Installing sqlite3, for prototyping database-backed rails apps"
  sudo apt-get install -y libsqlite3-dev sqlite3
@@ -55,33 +65,49 @@ fancy_echo "Installing zsh ..."
 fancy_echo "Installing mercurial ..."
   sudo apt-get install -y mercurial
 
-fancy_echo "Installing node.js ..."
-  sudo apt-get install -y nodejs### end linux-components/derivative-packages
+### end linux-components/derivative-packages
 
 fancy_echo "Changing your shell to zsh ..."
-  chsh -s $(which zsh)### end common-components/zsh
+chsh -s $(which zsh)
 
-fancy_echo "Install Vundle..."
-git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
+### end common-components/zsh
+
+fancy_echo "Dotfiles installieren..."
+cd
+git clone http://github.com/atitsbest/dotfiles && cd dotfiles && ./setup.sh
+
+### end common-components/dotfiles
+
+fancy_echo "Installing Vim-Plugins..."
+if [ ! -d "~/.vim/bundle/vundle"  ]; then
+    git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
+fi
 
 fancy_echo "Install Vim Themes installieren..."
 cd /tmp
+rm -rf /tmp/vim-tomorrow-theme
 git clone http://github.com/chriskempson/vim-tomorrow-theme
-mkdir ~/.vim/colors
+mkdir -p ~/.vim/colors
 cp /tmp/vim-tomorrow-theme/colors/* ~/.vim/colors/
 cd ~/.vim/colors
 wget -N http://raw.github.com/oguzbilgic/sexy-railscasts-theme/master/colors/sexy-railscasts.vim
 
-fancy_echo "Install Airline..."
-mkdir $HOME/.fonts
+if [ ! -d ~/.vim/bundle/vim-go ]; then
+  git clone https://github.com/fatih/vim-go.git ~/.vim/bundle/vim-go
+fi
+
+mkdir -p $HOME/.fonts
 cd $HOME/.fonts
+rm -f *Powerline.*
 wget -N https://raw.github.com/Lokaltog/powerline-fonts/master/Inconsolata/Inconsolata%20for%20Powerline.otf
 wget -N https://raw.github.com/Lokaltog/powerline-fonts/master/DroidSansMono/Droid%20Sans%20Mono%20for%20Powerline.otf
 wget -N https://raw.github.com/Lokaltog/powerline-fonts/master/DejaVuSansMono/DejaVu%20Sans%20Mono%20for%20Powerline.ttf
 wget -N https://raw.github.com/Lokaltog/powerline-fonts/master/DejaVuSansMono/DejaVu%20Sans%20Mono%20Oblique%20for%20Powerline.ttf
 wget -N https://raw.github.com/Lokaltog/powerline-fonts/master/DejaVuSansMono/DejaVu%20Sans%20Mono%20Bold%20for%20Powerline.ttf
 wget -N https://raw.github.com/Lokaltog/powerline-fonts/master/DejaVuSansMono/DejaVu%20Sans%20Mono%20Bold%20Oblique%20for%20Powerline.ttf
-sudo fc-cache -f### end linux-components/vim-setup
+sudo fc-cache -f
+
+### end linux-components/vim-plugins
 
 if ! command -v ag &>/dev/null; then
   fancy_echo "Installing The Silver Searcher (better than ack or grep) to search the contents of files ..."
@@ -93,35 +119,58 @@ if ! command -v ag &>/dev/null; then
     sudo make install
     cd
     rm -rf /tmp/the_silver_searcher
-fi### end linux-components/silver-searcher-from-source
+fi
 
-fancy_echo "Dotfiles installieren..."
-cd
-git clone http://github.com/atitsbest/dotfiles && cd dotfiles && ./setup.sh### end common-components/dotfiles
+### end linux-components/silver-searcher-from-source
 
 fancy_echo "Go installieren..."
-cd /tmp
-wget -N https://go.googlecode.com/files/go1.2.1.linux-386.tar.gz
-sudo tar -C /usr/local -xzf go1.2.1.linux-386.tar.gz
-mkdir -p $HOME/dev/go/bin
-mkdir -p $HOME/dev/go/src
-sed '/export GO/d' $HOME/.zshrc.local
-echo 'export GOROOT=/usr/local/go' >> ~/.zshrc.local
-echo 'export GOPATH=$HOME/dev/go' >> ~/.zshrc.local
-echo 'export GOBIN=$GOPATH/bin' >> ~/.zshrc.local
-echo 'export PATH=$PATH:$GOROOT/bin:$GOBIN' >> ~/.zshrc.local
-
-# Damit wir schon jetzt die Go Packages installieren können.
-export GOROOT=/usr/local/go
-export GOPATH=$HOME/dev/go
-export GOBIN=$GOPATH/bin
-export PATH=$PATH:$GOROOT/bin:$GOBIN
-
 if type go > /dev/null; then
-	cd ~/.vim/bundle
-	git clone https://github.com/fatih/vim-go.git
-fi### end linux-components/golang
+  fancy_echo "Go already installed"
+else
+  cd /tmp
+  wget -N https://go.googlecode.com/files/go1.2.1.linux-amd64.tar.gz
+  sudo tar -C /usr/local -xzf go1.2.1.linux-amd64.tar.gz
+  mkdir -p $HOME/dev/go/bin
+  mkdir -p $HOME/dev/go/src
+  touch $HOME/.zshrc.local
+  sed '/export GO/d' $HOME/.zshrc.local
+  echo 'export GOROOT=/usr/local/go' >> ~/.zshrc.local
+  echo 'export GOPATH=$HOME/dev/go' >> ~/.zshrc.local
+  echo 'export GOBIN=$GOPATH/bin' >> ~/.zshrc.local
+  echo 'export PATH=$PATH:$GOROOT/bin:$GOBIN' >> ~/.zshrc.local
+
+  # Damit wir schon jetzt die Go Packages installieren können.
+  export GOROOT=/usr/local/go
+  export GOPATH=$HOME/dev/go
+  export GOBIN=$GOPATH/bin
+  export PATH=$PATH:$GOROOT/bin:$GOBIN
+fi
+
+
+### end linux-components/golang
+
+if ! command -v node &>/dev/null; then
+  fancy_echo "Installing Node.js"
+  cd /tmp
+  git clone https://github.com/joyent/node.git
+  cd node
+  git checkout v0.10.26 #Try checking nodejs.org for what the stable version is
+  ./configure && make && sudo make install
+fi
+
+### end linux-components/nodejs
 
 fancy_echo "Installing Node.js Packages..."
-sudo npm install -g bower brunch### end common-components/nodejs-packages
+sudo npm install -g bower brunch less
+
+### end common-components/nodejs-packages
+
+fancy_echo FERTIG
+fancy_echo "Nicht vergessen:"
+fancy_echo " - Im Terminal einen Font für Powerline auswählen"
+fancy_echo " - Chrome als Standard-Browser setzten"
+fancy_echo " - Vim Bundles insteallieren (:BundleInstall)"
+fancy_echo " - Abmelden und neu anmelden (damit zsh verwendet wird)"
+
+### end linux-components/remember
 

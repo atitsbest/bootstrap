@@ -1,4 +1,4 @@
-if ! grep -qiE 'wheezy|jessie|precise|saucy|trusty' /etc/os-release; then
+if ! uname -a | grep -E 'wheezy|jessie|precise|saucy|trusty'; then
   fancy_echo "Sorry! we don't currently support that distro."
   exit 1
 fi

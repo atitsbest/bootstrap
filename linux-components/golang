@@ -1,22 +1,23 @@
 fancy_echo "Go installieren..."
-cd /tmp
-wget -N https://go.googlecode.com/files/go1.2.1.linux-386.tar.gz
-sudo tar -C /usr/local -xzf go1.2.1.linux-386.tar.gz
-mkdir -p $HOME/dev/go/bin
-mkdir -p $HOME/dev/go/src
-sed '/export GO/d' $HOME/.zshrc.local
-echo 'export GOROOT=/usr/local/go' >> ~/.zshrc.local
-echo 'export GOPATH=$HOME/dev/go' >> ~/.zshrc.local
-echo 'export GOBIN=$GOPATH/bin' >> ~/.zshrc.local
-echo 'export PATH=$PATH:$GOROOT/bin:$GOBIN' >> ~/.zshrc.local
-
-# Damit wir schon jetzt die Go Packages installieren können.
-export GOROOT=/usr/local/go
-export GOPATH=$HOME/dev/go
-export GOBIN=$GOPATH/bin
-export PATH=$PATH:$GOROOT/bin:$GOBIN
-
 if type go > /dev/null; then
-	cd ~/.vim/bundle
-	git clone https://github.com/fatih/vim-go.git
+  fancy_echo "Go already installed"
+else
+  cd /tmp
+  wget -N https://go.googlecode.com/files/go1.2.1.linux-amd64.tar.gz
+  sudo tar -C /usr/local -xzf go1.2.1.linux-amd64.tar.gz
+  mkdir -p $HOME/dev/go/bin
+  mkdir -p $HOME/dev/go/src
+  touch $HOME/.zshrc.local
+  sed '/export GO/d' $HOME/.zshrc.local
+  echo 'export GOROOT=/usr/local/go' >> ~/.zshrc.local
+  echo 'export GOPATH=$HOME/dev/go' >> ~/.zshrc.local
+  echo 'export GOBIN=$GOPATH/bin' >> ~/.zshrc.local
+  echo 'export PATH=$PATH:$GOROOT/bin:$GOBIN' >> ~/.zshrc.local
+
+  # Damit wir schon jetzt die Go Packages installieren können.
+  export GOROOT=/usr/local/go
+  export GOPATH=$HOME/dev/go
+  export GOBIN=$GOPATH/bin
+  export PATH=$PATH:$GOROOT/bin:$GOBIN
 fi
+
