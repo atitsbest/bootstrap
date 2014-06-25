@@ -3,8 +3,8 @@ if type go > /dev/null; then
   fancy_echo "Go already installed"
 else
   cd /tmp
-  wget -N https://go.googlecode.com/files/go1.2.1.linux-amd64.tar.gz
-  sudo tar -C /usr/local -xzf go1.2.1.linux-amd64.tar.gz
+  wget -N https://go.googlecode.com/files/go1.3.linux-amd64.tar.gz
+  sudo tar -C /usr/local -xzf go1.3.linux-amd64.tar.gz
   mkdir -p $HOME/dev/go/bin
   mkdir -p $HOME/dev/go/src
   touch $HOME/.zshrc.local
