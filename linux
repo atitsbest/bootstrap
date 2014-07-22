@@ -14,15 +14,8 @@ fancy_echo() {
 
 ### end common-components/shared-functions
 
-if ! uname -a | grep -E 'wheezy|jessie|precise|saucy|trusty'; then
-  fancy_echo "Sorry! we don't currently support that distro."
-  exit 1
-fi
-
-### end linux-components/distro-check
-
 fancy_echo "Updating system packages ..."
-sudo apt-get update
+#sudo apt-get update
 
 ### end linux-components/package-update
 

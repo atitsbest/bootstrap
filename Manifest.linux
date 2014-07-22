@@ -1,7 +1,6 @@
 common-components/bash-shebang
 common-components/exit-trap
 common-components/shared-functions
-linux-components/distro-check
 linux-components/package-update
 linux-components/derivative-packages
 common-components/zsh
